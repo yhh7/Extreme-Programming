@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SysUserContactMapper">
+    
+    <resultMap type="SysUserContact" id="SysUserContactResult">
+        <result property="userId"    column="user_id"    />
+        <result property="contactId"    column="contact_id"    />
+    </resultMap>
+
+    <sql id="selectSysUserContactVo">
+        select user_id, contact_id from sys_user_contact
+    </sql>
+
+    <select id="selectSysUserContactList" parameterType="SysUserContact" resultMap="SysUserContactResult">
+        <include refid="selectSysUserContactVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectSysUserContactByUserId" parameterType="Long" resultMap="SysUserContactResult">
+        <include refid="selectSysUserContactVo"/>
+        where user_id = #{userId}
+    </select>
+
+    <insert id="insertSysUserContact" parameterType="SysUserContact">
+        insert into sys_user_contact
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="contactId != null">contact_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="contactId != null">#{contactId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysUserContact" parameterType="SysUserContact">
+        update sys_user_contact
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="contactId != null">contact_id = #{contactId},</if>
+        </trim>
+        where user_id = #{userId}
+    </update>
+
+    <delete id="deleteSysUserContactByUserId" parameterType="Long">
+        delete from sys_user_contact where user_id = #{userId}
+    </delete>
+
+    <delete id="deleteSysUserContactByUserIds" parameterType="String">
+        delete from sys_user_contact where user_id in 
+        <foreach item="userId" collection="array" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </delete>
+
+
+    <delete id="deleteSysUserContactByUserIdAndContactId" parameterType="SysUserContact">
+        DELETE FROM sys_user_contact
+        WHERE user_id = #{userId} AND contact_id = #{contactId}
+    </delete>
+</mapper>

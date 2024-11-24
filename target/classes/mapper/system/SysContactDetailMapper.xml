@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SysContactDetailMapper">
+    
+    <resultMap type="SysContactDetail" id="SysContactDetailResult">
+        <result property="sysContactDetailId"    column="sys_contact_detail_id"    />
+        <result property="contactName"    column="contact_name"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="phoneNumber"    column="phone_number"    />
+        <result property="email"    column="email"    />
+        <result property="address"    column="address"    />
+        <result property="social"    column="social"    />
+    </resultMap>
+
+    <sql id="selectSysContactDetailVo">
+        select sys_contact_detail_id, contact_name, create_by, create_time, update_by, update_time, phone_number, email, address, social from sys_contact_detail
+    </sql>
+
+    <select id="selectSysContactDetailList" parameterType="SysContactDetail" resultMap="SysContactDetailResult">
+        <include refid="selectSysContactDetailVo"/>
+        <where>  
+            <if test="contactName != null  and contactName != ''"> and contact_name like concat('%', #{contactName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectSysContactDetailBySysContactDetailId" parameterType="Long" resultMap="SysContactDetailResult">
+        <include refid="selectSysContactDetailVo"/>
+        where sys_contact_detail_id = #{sysContactDetailId}
+    </select>
+
+    <insert id="insertSysContactDetail" parameterType="SysContactDetail" useGeneratedKeys="true" keyProperty="sysContactDetailId">
+        insert into sys_contact_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="contactName != null">contact_name,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="phoneNumber != null">phone_number,</if>
+            <if test="email != null">email,</if>
+            <if test="address != null">address,</if>
+            <if test="social != null">social,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="contactName != null">#{contactName},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="phoneNumber != null">#{phoneNumber},</if>
+            <if test="email != null">#{email},</if>
+            <if test="address != null">#{address},</if>
+            <if test="social != null">#{social},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysContactDetail" parameterType="SysContactDetail">
+        update sys_contact_detail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="contactName != null">contact_name = #{contactName},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="phoneNumber != null">phone_number = #{phoneNumber},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="social != null">social = #{social},</if>
+        </trim>
+        where sys_contact_detail_id = #{sysContactDetailId}
+    </update>
+
+    <delete id="deleteSysContactDetailBySysContactDetailId" parameterType="Long">
+        delete from sys_contact_detail where sys_contact_detail_id = #{sysContactDetailId}
+    </delete>
+
+    <delete id="deleteSysContactDetailBySysContactDetailIds" parameterType="String">
+        delete from sys_contact_detail where sys_contact_detail_id in 
+        <foreach item="sysContactDetailId" collection="array" open="(" separator="," close=")">
+            #{sysContactDetailId}
+        </foreach>
+    </delete>
+</mapper>
